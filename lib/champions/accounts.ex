@@ -350,4 +350,32 @@ defmodule Champions.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user changes.
+
+  ## Examples
+
+      iex> change_user_points(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_points(%User{} = user, attrs \\ %{}) do
+    User.points_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the current number of points of a user
+
+  ## Examples
+
+      iex> update_user_points(user, 10)
+      {:ok, %User{points: 10}}
+
+  """
+  def update_user_points(%User{} = user, points) do
+    user
+    |> change_user_points(%{"points" => points})
+    |> Repo.update()
+  end
 end

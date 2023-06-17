@@ -156,4 +156,14 @@ defmodule Champions.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  @doc """
+  A user changeset to update points
+  """
+  def points_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:points])
+    |> validate_required([:points])
+    |> validate_number(:points, greater_than_or_equal_to: 0)
+  end
 end
