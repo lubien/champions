@@ -27,6 +27,19 @@ defmodule Champions.Accounts do
   end
 
   @doc """
+  List users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}]
+
+  """
+  def list_users() do
+    Repo.all(User)
+  end
+
+  @doc """
   Gets a user by email and password.
 
   ## Examples
