@@ -19,4 +19,15 @@ defmodule ChampionsWeb.UserLiveTest do
       assert html =~ user.email
     end
   end
+
+  describe "Show" do
+    setup [:create_user]
+
+    test "displays user", %{conn: conn, user: user} do
+      {:ok, _show_live, html} = live(conn, ~p"/users/#{user}")
+
+      assert html =~ "This is a player on this app"
+      assert html =~ user.email
+    end
+  end
 end

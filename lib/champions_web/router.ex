@@ -79,6 +79,7 @@ defmodule ChampionsWeb.Router do
     live_session :current_user,
       on_mount: [{ChampionsWeb.UserAuth, :mount_current_user}] do
       live "/users", UserLive.Index, :index
+      live "/users/:id", UserLive.Show, :show
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
