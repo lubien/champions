@@ -537,4 +537,32 @@ defmodule Champions.AccountsTest do
       assert [^user] = Accounts.list_users()
     end
   end
+
+  describe "concede_loss_to/1" do
+    test "adds 3 points to the winner" do
+      user = user_fixture()
+      assert user.points == 0
+      assert {:ok, %User{points: 3}} = Accounts.concede_loss_to(user)
+    end
+  end
+
+  describe "declare_draw_match/2" do
+    test "adds 1 point to each user" do
+      user_a = user_fixture()
+      user_b = user_fixture()
+      assert user_a.points == 0
+      assert user_b.points == 0
+      assert {:ok, %User{points: 1}, %User{points: 1}} = Accounts.declare_draw_match(user_a, user_b)
+    end
+  end
+
+  describe "increment_user_points/2" do
+    test "performs an atomic increment on a single user points amount" do
+      user = user_fixture()
+      assert user.points == 0
+      assert {:ok, %User{points: 10}} = Accounts.increment_user_points(user, 10)
+      assert {:ok, %User{points: 5}} = Accounts.update_user_points(user, 5)
+      assert {:ok, %User{points: 15}} = Accounts.increment_user_points(user, 10)
+    end
+  end
 end

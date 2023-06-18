@@ -391,4 +391,50 @@ defmodule Champions.Accounts do
     |> change_user_points(%{"points" => points})
     |> Repo.update()
   end
+
+  @doc """
+  Adds 3 points to the winning user
+
+  ## Examples
+
+      iex> concede_loss_to(%User{points: 0})
+      {:ok, %User{points: 3}}
+
+  """
+  def concede_loss_to(winner) do
+    increment_user_points(winner, 3)
+  end
+
+  @doc """
+  Adds 1 point to each user
+
+  ## Examples
+
+      iex> declare_draw_match(%User{points: 0}, %User{points: 0})
+      {:ok, %User{points: 1}, %User{points: 1}}
+
+  """
+  def declare_draw_match(user_a, user_b) do
+    {:ok, updated_user_a} = increment_user_points(user_a, 1)
+    {:ok, updated_user_b} = increment_user_points(user_b, 1)
+    {:ok, updated_user_a, updated_user_b}
+  end
+
+  @doc """
+  Increments `amount` points to the user and returns its updated model
+
+  ## Examples
+
+      iex> increment_user_points(%User{points: 0}, 1)
+      {:ok, %User{points: 1}}
+
+  """
+  def increment_user_points(user, amount) do
+    {1, nil} =
+      User
+      |> where(id: ^user.id)
+      |> Repo.update_all(inc: [points: amount])
+
+    {:ok, get_user!(user.id)}
+  end
 end
