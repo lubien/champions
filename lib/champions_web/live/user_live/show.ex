@@ -24,12 +24,12 @@ defmodule ChampionsWeb.UserLive.Show do
   end
 
   def handle_event("concede_loss", _value, %{assigns: %{current_user: current_user, user: user}} = socket) do
-    {:ok, updated_user} = Accounts.concede_loss_to(current_user, user)
+    {:ok, updated_user} = Ranking.concede_loss_to(current_user, user)
     {:noreply, assign(socket, :user, updated_user)}
   end
 
   def handle_event("concede_draw", _value, %{assigns: %{current_user: current_user, user: user}} = socket) do
-    {:ok, updated_my_user, updated_user} = Accounts.declare_draw_match(current_user, user)
+    {:ok, updated_my_user, updated_user} = Ranking.declare_draw_match(current_user, user)
     {:noreply,
       socket
       |> assign(:user, updated_user)

@@ -507,63 +507,10 @@ defmodule Champions.AccountsTest do
     end
   end
 
-  describe "change_user_points/2" do
-    test "accepts non-negative integers" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_points(%User{}, %{"points" => -1})
-      refute changeset.valid?
-
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_points(%User{}, %{"points" => 0})
-      assert changeset.valid?
-
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_points(%User{}, %{"points" => 10})
-      assert changeset.valid?
-    end
-  end
-
-  describe "set_user_points/2" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "updates the amounts of points of an existing user", %{user: user} do
-      {:ok, updated_user} = Accounts.update_user_points(user, 10)
-      assert updated_user.points == 10
-    end
-  end
-
   describe "list_users/0" do
     test "show all users on our system" do
       user = user_fixture()
       assert [^user] = Accounts.list_users()
-    end
-  end
-
-  describe "concede_loss_to/2" do
-    test "adds 3 points to the winner" do
-      loser = user_fixture()
-      user = user_fixture()
-      assert user.points == 0
-      assert {:ok, %User{points: 3}} = Accounts.concede_loss_to(loser, user)
-    end
-  end
-
-  describe "declare_draw_match/2" do
-    test "adds 1 point to each user" do
-      user_a = user_fixture()
-      user_b = user_fixture()
-      assert user_a.points == 0
-      assert user_b.points == 0
-      assert {:ok, %User{points: 1}, %User{points: 1}} = Accounts.declare_draw_match(user_a, user_b)
-    end
-  end
-
-  describe "increment_user_points/2" do
-    test "performs an atomic increment on a single user points amount" do
-      user = user_fixture()
-      assert user.points == 0
-      assert {:ok, %User{points: 10}} = Accounts.increment_user_points(user, 10)
-      assert {:ok, %User{points: 5}} = Accounts.update_user_points(user, 5)
-      assert {:ok, %User{points: 15}} = Accounts.increment_user_points(user, 10)
     end
   end
 end
