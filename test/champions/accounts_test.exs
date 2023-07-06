@@ -538,11 +538,12 @@ defmodule Champions.AccountsTest do
     end
   end
 
-  describe "concede_loss_to/1" do
+  describe "concede_loss_to/2" do
     test "adds 3 points to the winner" do
+      loser = user_fixture()
       user = user_fixture()
       assert user.points == 0
-      assert {:ok, %User{points: 3}} = Accounts.concede_loss_to(user)
+      assert {:ok, %User{points: 3}} = Accounts.concede_loss_to(loser, user)
     end
   end
 

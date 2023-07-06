@@ -5,6 +5,7 @@ defmodule Champions.Accounts do
 
   import Ecto.Query, warn: false
   alias Champions.Repo
+  alias Champions.Ranking
 
   alias Champions.Accounts.{User, UserToken, UserNotifier}
 
@@ -401,7 +402,12 @@ defmodule Champions.Accounts do
       {:ok, %User{points: 3}}
 
   """
-  def concede_loss_to(winner) do
+  def concede_loss_to(loser, winner) do
+    {:ok, _match} = Ranking.create_match(%{
+      user_a_id: loser.id,
+      user_b_id: winner.id,
+      result: :winner_b
+    })
     increment_user_points(winner, 3)
   end
 
@@ -415,6 +421,11 @@ defmodule Champions.Accounts do
 
   """
   def declare_draw_match(user_a, user_b) do
+    {:ok, _match} = Ranking.create_match(%{
+      user_a_id: user_a.id,
+      user_b_id: user_b.id,
+      result: :draw
+    })
     {:ok, updated_user_a} = increment_user_points(user_a, 1)
     {:ok, updated_user_b} = increment_user_points(user_b, 1)
     {:ok, updated_user_a, updated_user_b}
